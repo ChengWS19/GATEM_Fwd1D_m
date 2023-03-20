@@ -1,5 +1,12 @@
 function [times, outBt, outEt] = GATEM_Fwd1D(cmd)
-    par_on(cmd.numthreads)
+    
+    if cmd.numthreads<=0 || rem(cmd.numthreads,1)~=0
+        disp('并行线程数非正整数，默认开启单线程')
+        par_on(1)
+    else
+        par_on(cmd.numthreads)
+    end
+
     times = cmd.t;
     recs=cmd.rec;
     
