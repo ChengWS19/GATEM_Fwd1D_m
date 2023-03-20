@@ -14,7 +14,7 @@ function [hw,ew]= HwFwdElecPole( omg, rho, th, nlayer, x, y, z )
     end
     hi1 = complex(0,0); hi4 = complex(0,0); hi5 = complex(0,0);
     hi6 = complex(0,0); hi7 = complex(0,0); hi8 = complex(0,0);
-    hi9 = complex(0,0); hi10 = complex(0,0); 
+    hi9 = complex(0,0); hi10 = complex(0,0);hi11 = complex(0,0);
     for i = 1: size(Hankel0,2)
         for j = 1: nlayer
             M1(j) = sqrt(M(i,1)^2-KK1(j,1));
@@ -38,19 +38,22 @@ function [hw,ew]= HwFwdElecPole( omg, rho, th, nlayer, x, y, z )
         hi8 = M1(1,1)/r1*exp(M(i,1)*z)*Hankel1(1,i)+hi8;
         hi9 = M(i,1)/ctemp*exp(M(i,1)*z)*Hankel0(1,i)+hi9;
 
-%         hi10 = M(i,1)*M1(1,1)/rr1*exp(M(i,1)*z)*Hankel1(1,i)+hi10;
-        hi10 = M(i,1)^2*exp(M(i,1)*z)*Hankel1(1,i)+hi10;
-    
+        hi10 = M(i,1)*M1(1,1)/r1*exp(M(i,1)*z)*Hankel1(1,i)+hi10; % 层状介质Ez，仍需确定
+        hi11 = M(i,1)^2*exp(M(i,1)*z)*Hankel1(1,i)+hi10;          % 均匀半空间Ez，仍需确定
     end
     hi1 = hi1/r; hi4 = hi4/r; hi5 = hi5/r;
     hi6 = hi6/r; hi7 = hi7/r; hi8 = hi8/r;
-    hi9 = hi9/r; hi10 = hi10/r;
+    hi9 = hi9/r; hi10 = hi10/r;hi11 = hi11/r;
     cosp = x/r; sinp = y/r;
     
     iwu=complex(0,omg*u0);
     er=1/2/pi*cosp*(iwu/r*hi6-rho(1)*hi7+rho(1)/r*hi8);
     ep=1/2/pi*sinp*(iwu/r*hi6-iwu*hi9+rho(1)/r*hi8);
-    ez=0; % ez=1/2/pi*cosp*(iwu*hi1-rho(1)*hi10); 
+    ez=0;
+%     ez=1/2/pi*cosp*rho(1)*hi11;
+%     ez=-1/2/pi*cosp*rho(1)*hi10; % ∂U/∂Z~=0
+%     ez=1/2/pi*cosp*iwu*hi1; % ∂U/∂Z=0
+
     hr = -1/2/pi * sinp * (hi1/r-hi4);
     hp = 1/2/pi * cosp * hi1/r;
     hz = 1/2/pi * sinp * hi5;

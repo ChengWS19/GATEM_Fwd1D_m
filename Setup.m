@@ -3,23 +3,19 @@ start=tic;
 %% 设置正演模型
 cmd = {};
 cmd.model='model1';
-cmd.nlayer = 2;
-cmd.res = [100,10];
-cmd.thickness = [200];
+cmd.nlayer = 1;
+cmd.res = [100];
+cmd.thickness = [];
 %% 设置源和电流、采样时间、接收点
 cmd.I0 = 1;
 cmd.t = logspace(-5, -2, 50);
 % 源
-cmd.nsource = 4;
-cmd.src = [1, 1, 1, -1;
-1,-1,-1,-1;
--1,-1,-1,1;
--1,1,1,1;];
-cmd.ndipole = 10;
-
+cmd.nsource = 1;
+cmd.src = [-50 0 50 0];
+cmd.ndipole = 20;
 % 接收点
 cmd.drec = 10;
-cmd.rec(:,1)=0:cmd.drec:0;
+cmd.rec(:,1)=100:cmd.drec:100;
 cmd.nrec=size(cmd.rec,1);
 cmd.rec(:,2)=0:cmd.drec:0;
 cmd.rec(:,3)=0:cmd.drec:0;
